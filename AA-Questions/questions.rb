@@ -3,6 +3,7 @@ require_relative "questionsDBconnection"
 require_relative 'question_follows'
 require_relative 'question_likes'
 # require_relative 'replies'
+#random comment for commit
 
 class Question
     attr_accessor :title, :body, :author_id, :id
