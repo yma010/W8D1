@@ -9,7 +9,7 @@ class QuestionFollow
         SELECT
             *
         FROM
-            questions
+            question_follows
         WHERE
             id = ?
     SQL
@@ -17,14 +17,14 @@ class QuestionFollow
   end
 
   def initialize(options)
-    @id, @user_id, @question_id = options["id"], options["user_id"], options["question_id"]
+    @id, @users_id, @question_id = options["id"], options["user_id"], options["question_id"]
   end
 
   def insert
     raise "#{self} already in database" if id
-    QuestionDBConnection.instance.execute(<<-SQL, question_id, user_id)
+    QuestionsDBConnection.instance.execute(<<-SQL, question_id, user_id)
       INSERT INTO
-        question_follows
+        question_follows(question_id, user_id)
       VALUES
         (?, ?)
     SQL
@@ -33,7 +33,7 @@ class QuestionFollow
   
   def update
     raise "#{self} not in Database" unless id
-    QuestionDBConnection.instance.execute(<<-SQL, question_id, user_id, id)
+    QuestionsDBConnection.instance.execute(<<-SQL, question_id, user_id, id)
         UPDATE
             question_follows
         SET

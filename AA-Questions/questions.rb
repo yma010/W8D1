@@ -54,4 +54,29 @@ class Question
         SQL
     end
 
+    def replies
+        data = QuestionsDBConnection.instance.execute(<<-SQL, id)
+            SELECT
+                *
+            FROM
+                replies
+            WHERE
+                question_id = ?
+        SQL
+        data.map {|hash| Reply.new(hash)}
+    end
+
+    def author
+        data = QuestionsDBConnection.instance.execute(<<-SQL, id)
+            SELECT
+                *
+            FROM
+                users
+            WHERE
+                id = ?
+        SQL
+
+        data.map {|hash| User.new(hash)}
+    
+    end
 end

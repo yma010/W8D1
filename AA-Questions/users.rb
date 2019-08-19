@@ -14,7 +14,7 @@ class User
         AND
         lname = ?
     SQL
-    User.new(data.first)
+    data.map {|info| User.new(info)}
   end
 
   def self.find_by_id(target_id)
@@ -60,6 +60,27 @@ class User
 
 
   def authored_questions
+    data = QuestionsDBConnection.instance.execute(<<-SQL, id)
+        SELECT
+            *
+        FROM
+            questions
+        WHERE
+            author_id = ?
+    SQL
+    data.map {|quest| Question.new(quest)}
+  end
+
+  def authored_replies
+    data = QuestionsDBConnection.instance.execute(<<-SQL, id)
+      SELECT
+        *
+      FROM
+        replies
+      WHERE
+        user_id = ?
+    SQL
+    data.map {|hash| Reply.new(hash)}
   end
 
 

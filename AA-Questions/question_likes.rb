@@ -24,10 +24,10 @@ class QuestionLike
         raise "#{self} already is in the database" if id
         QuestionsDBConnection.instance.execute(<<-SQL, user_id, question_id)
             INSERT INTO
-                question_likes
+                question_likes(user_id, question_id)
             VALUES
-                user_id = ?, question_id = ?
-        SQL
+                (?,?)
+       SQL
         id = QuestionsDBConnection.instance.last_insert_row_id
     end
 
