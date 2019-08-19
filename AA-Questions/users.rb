@@ -17,8 +17,8 @@ class User
     User.new(data.first)
   end
 
-  def self.find_by_id(id)
-    data = QuestionsDBConnection.instance.execute(<<-SQL, id)
+  def self.find_by_id(target_id)
+    data = QuestionsDBConnection.instance.execute(<<-SQL, target_id)
       SELECT
         *
       FROM
@@ -36,7 +36,7 @@ class User
   end
 
   def insert
-    raise "#{self} already in database" if @id
+    raise "#{self} already in database" if id
     QuestionsDBConnection.instance.execute(<<-SQL, fname, lname)
     INSERT INTO
         users(fname, lname)
