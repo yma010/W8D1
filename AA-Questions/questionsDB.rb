@@ -1,0 +1,6 @@
+require_relative 'questionsDBconnection'
+require_relative 'questions'
+require_relative 'users'
+require_relative 'question_follows'
+require_relative 'question_likes'
+require_relative 'replies'
