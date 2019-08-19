@@ -1,4 +1,8 @@
 require_relative 'questionsDBconnection'
+# require_relative 'questions'
+require_relative 'question_follows'
+require_relative 'question_likes'
+# require_relative 'replies'
 
 class User
   attr_accessor :fname, :lname, :id
@@ -83,5 +87,34 @@ class User
     data.map {|hash| Reply.new(hash)}
   end
 
+  def followed_questions
+    QuestionFollow.followed_questions_for_user_id(id)
+  end
 
+  def liked_questions
+    QuestionLike.liked_questions_for_user_id(id)
+  end
+
+  def average_karma
+    data = QuestionsDBConnection.instance.execute(<<-SQL, id)
+      SELECT
+        (CAST(COUNT(question_likes.id) AS FLOAT) / COUNT(DISTINCT (questions.id))) AS average
+      FROM
+        questions
+      LEFT JOIN
+        question_likes ON questions.id = question_likes.question_id
+      WHERE
+        questions.author_id = ?
+    SQL
+
+    data.first['average']
+  end
+
+  def save
+    if id
+      update
+    else
+      insert
+    end
+  end
 end

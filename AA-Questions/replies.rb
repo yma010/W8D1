@@ -112,5 +112,12 @@ class Reply
       SQL
       data.map {|hash| Reply.new(hash)}
     end
-
+    
+    def save
+        if id
+            update
+        else
+            insert
+        end
+    end
 end
